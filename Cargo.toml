@@ -1,0 +1,9 @@
+[package]
+name = "typed-agents"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+TSPL = "0.0.12"
+itertools = "0.13.0"
+slotmap = "1.0.7"

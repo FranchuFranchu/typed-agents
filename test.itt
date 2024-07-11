@@ -1,0 +1,61 @@
+Type: Type
+Universe: Type
+!Universe: Type
+Universe ~ !Universe
+
+EraType: !Universe
+DupType(b -> b: Universe c -> c: Universe): !Universe
+Era: EraType : !Universe
+Dup(b -> b: x0 c -> c: x1) : DupType(x0 x1) : !Universe 
+
+Bool: Universe
+Bool ~ EraType
+Bool ~ DupType(Bool Bool)
+
+Bool ~ !Bool
+
+True: Bool
+True ~ Era
+True ~ Dup(True True)
+
+False: Bool
+False ~ Era
+False ~ Dup(False False)
+
+Not(x -> x: Bool): !Bool
+Not(False) ~ True
+Not(True) ~ False
+
+And(x -> x: !Bool y -> y: Bool): !Bool
+And(x x) ~ True
+And(Era False) ~ False
+
+Zero: Nat
+Succ(pred -> pred: !Nat): Nat
+
+Nat: Universe
+Nat ~ EraType
+Nat ~ DupType(Nat Nat)
+
+Zero ~ Era
+Succ(Era) ~ Era
+Zero ~ Dup(Zero Zero)
+Succ(Dup(a b)) ~ Dup(Succ(a) Succ(b))
+
+Nat ~ !Nat
+
+Add(y -> y: !Nat o -> o: Nat): !Nat
+Add(y y) ~ Zero
+Add(a Succ(b)) ~ Succ(Add(a b))
+
+; Can't guarantee these work right now.
+Eq(Dup(t0 Dup(t1 t2)) -> t2: Universe a -> a: t0 b -> b: t1): Type
+Refl(Dup(t0 Dup(t1 t2)) -> t2: Universe Dup(a0 Dup(a1 a2)) -> a0: t1): Eq(t2 a1 a2) 
+
+check yes True ~ Not(x)
+check no Era ~ Not(x)
+check no Type ~ Not(x)
+check yes True ~ Not(And(False x))
+check yes True ~ Not(And(True x))
+check yes Succ(Succ(Zero)) ~ Add(Succ(Succ(Zero)) x)
+check no False ~ Add(Succ(Succ(Zero)) x)
